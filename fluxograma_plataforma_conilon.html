@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluxograma — Plataforma Digital para Cafeicultura de Conilon</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
+
+  :root {
+    --verde-escuro: #1a3a1f;
+    --verde-medio: #2d6a35;
+    --verde-claro: #4a9455;
+    --verde-suave: #7bc47f;
+    --verde-palido: #c8e6c9;
+    --verde-bg: #f1f8f2;
+    --cafe-escuro: #3e1c00;
+    --cafe-medio: #6d3a1f;
+    --cafe-claro: #a05c2e;
+    --cafe-palido: #f5e6d3;
+    --cinza-texto: #2c2c2c;
+    --cinza-leve: #f7f7f7;
+    --branco: #ffffff;
+    --sombra: 0 4px 24px rgba(0,0,0,0.10);
+    --sombra-hover: 0 8px 36px rgba(0,0,0,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(160deg, #0f2213 0%, #1a3a1f 40%, #2d5a1b 100%);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    color: var(--cinza-texto);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 18px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    color: #ffffff;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header h1 span {
+    color: var(--verde-suave);
+  }
+  .header-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+  .header-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--verde-suave), transparent);
+    margin: 16px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── LEGENDA ── */
+  .legend-wrapper {
+    max-width: 860px;
+    margin: 0 auto 40px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 16px 24px;
+  }
+  .legend-title {
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .legend-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .leg-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+  }
+  .leg-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px rgba(255,255,255,0.2);
+  }
+
+  /* ── FLOW CONTAINER ── */
+  .flow-container {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* vertical line */
+  .flow-container::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 48px;
+    bottom: 48px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--verde-suave) 0%, rgba(123,196,127,0.2) 100%);
+    z-index: 0;
+  }
+
+  /* ── ETAPA CARD ── */
+  .etapa-card {
+    display: grid;
+    grid-template-columns: 58px 1fr;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 6px;
+  }
+
+  .etapa-number-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
+  .etapa-circle {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.1), 0 4px 14px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .etapa-circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.15), 0 6px 20px rgba(0,0,0,0.4);
+  }
+
+  .etapa-body-card {
+    background: var(--branco);
+    border-radius: 16px;
+    padding: 0;
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s;
+    cursor: pointer;
+    margin-left: 12px;
+    margin-bottom: 10px;
+  }
+  .etapa-body-card:hover {
+    box-shadow: var(--sombra-hover);
+    transform: translateY(-2px);
+  }
+  .etapa-body-card.open .etapa-detail {
+    display: block;
+  }
+  .etapa-body-card.open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .etapa-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 14px;
+  }
+  .etapa-header-left {
+    flex: 1;
+  }
+  .etapa-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 3px;
+  }
+  .etapa-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cinza-texto);
+    line-height: 1.3;
+  }
+  .etapa-months {
+    font-size: 10px;
+    color: #888;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .chevron {
+    width: 22px; height: 22px;
+    color: #bbb;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  /* ── DETAIL PANEL ── */
+  .etapa-detail {
+    display: none;
+    border-top: 1px solid #f0f0f0;
+    padding: 18px 20px 20px;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .detail-grid { grid-template-columns: 1fr; }
+    .flow-container::before { display: none; }
+    .etapa-card { grid-template-columns: 1fr; }
+    .etapa-number-col { flex-direction: row; padding: 14px 14px 0; }
+  }
+
+  .detail-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  .ativ-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .ativ-item {
+    font-size: 11.5px;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #fafafa;
+    border-left: 3px solid #ddd;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .atores-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .ator-pill {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .entrega-section {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #f6fef6;
+    border: 1px solid #c8e6c9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .entrega-icon { font-size: 18px; flex-shrink: 0; }
+  .entrega-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #388e3c;
+    margin-bottom: 1px;
+  }
+  .entrega-text {
+    font-size: 11.5px;
+    color: #2e7d32;
+    font-weight: 600;
+  }
+
+  /* ── ARROW BETWEEN CARDS ── */
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    padding-left: 70px;
+  }
+  .flow-arrow svg {
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── FOOTER ── */
+  .footer-band {
+    max-width: 860px;
+    margin: 32px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .footer-band { grid-template-columns: 1fr; }
+  }
+  .footer-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .footer-card-icon { font-size: 22px; margin-bottom: 6px; }
+  .footer-card-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 4px;
+  }
+  .footer-card-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  /* ── ETAPA COLORS ── */
+  .e1-color { background: linear-gradient(135deg, #1b5e20, #388e3c); }
+  .e1-bdr   { border-top: 4px solid #388e3c; }
+  .e1-ey    { color: #388e3c; }
+  .e1-ativ  { border-left-color: #388e3c !important; background: #f1f8f2 !important; }
+
+  .e2-color { background: linear-gradient(135deg, #1a237e, #1565c0); }
+  .e2-bdr   { border-top: 4px solid #1565c0; }
+  .e2-ey    { color: #1565c0; }
+  .e2-ativ  { border-left-color: #1565c0 !important; background: #e3f2fd !important; }
+
+  .e3-color { background: linear-gradient(135deg, #4a148c, #7b1fa2); }
+  .e3-bdr   { border-top: 4px solid #7b1fa2; }
+  .e3-ey    { color: #7b1fa2; }
+  .e3-ativ  { border-left-color: #7b1fa2 !important; background: #f3e5f5 !important; }
+
+  .e4-color { background: linear-gradient(135deg, #e65100, #f57c00); }
+  .e4-bdr   { border-top: 4px solid #f57c00; }
+  .e4-ey    { color: #e65100; }
+  .e4-ativ  { border-left-color: #f57c00 !important; background: #fff3e0 !important; }
+
+  .e5-color { background: linear-gradient(135deg, #004d40, #00796b); }
+  .e5-bdr   { border-top: 4px solid #00796b; }
+  .e5-ey    { color: #00796b; }
+  .e5-ativ  { border-left-color: #00796b !important; background: #e0f2f1 !important; }
+
+  /* ── ATOR COLORS ── */
+  .a-inc  { background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7; }
+  .a-ufes { background:#e3f2fd; color:#0d47a1; border-color:#90caf9; }
+  .a-bol  { background:#fff9c4; color:#f57f17; border-color:#fff176; }
+  .a-ext  { background:#ede7f6; color:#4a148c; border-color:#ce93d8; }
+  .a-con  { background:#fce4ec; color:#880e4f; border-color:#f48fb1; }
+  .a-prod { background:#fff3e0; color:#bf360c; border-color:#ffcc80; }
+  .a-alu  { background:#e1f5fe; color:#01579b; border-color:#81d4fa; }
+  .a-coo  { background:#f1f8e9; color:#33691e; border-color:#aed581; }
+
+  /* print */
+  @media print {
+    body { background: white; padding: 0; }
+    .etapa-detail { display: block !important; }
+    .chevron { display: none; }
+    .header h1 { color: #1a3a1f; }
+    .header-badge, .header-sub, .legend-wrapper { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">Edital FAPES 12/2026 · Extensão Tecnológica</div>
+  <h1>Plataforma Digital para <span>Cafeicultura de Conilon</span></h1>
+  <div class="header-sub">Fluxo de Execução · Incaper / CCAE-UFES · Microrregião Centro Sul · Espírito Santo</div>
+  <div class="header-line"></div>
+</div>
+
+<!-- LEGENDA -->
+<div class="legend-wrapper">
+  <div class="legend-title">Atores do Projeto</div>
+  <div class="legend-grid">
+    <div class="leg-item"><div class="leg-dot" style="background:#388e3c"></div>Pesquisadores Incaper</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1565c0"></div>Docentes CCAE-UFES</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f57f17"></div>Bolsista</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#7b1fa2"></div>Extensionistas locais</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#880e4f"></div>Consultores</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#bf360c"></div>Produtores rurais</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#01579b"></div>Estudantes CCAE-UFES</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#33691e"></div>Coordenador</div>
+  </div>
+</div>
+
+<!-- FLOW -->
+<div class="flow-container">
+
+  <!-- ETAPA 1 -->
+  <div class="etapa-card">
+    <div class="etapa-number-col">
+      <div class="etapa-circle e1-color" onclick="toggle('e1')">1</div>
+    </div>
+    <div class="etapa-body-card e1-bdr" id="e1" onclick="toggle('e1')">
+      <div class="etapa-header">
+        <div class="etapa-header-left">
+          <div class="etapa-eyebrow e1-ey">Etapa 1 · Meses 1–4</div>
+          <div class="etapa-name">Levantamento e validação das bases técnico-científicas</div>
+          <div class="etapa-months">Construção da base de conhecimento para os algoritmos da plataforma</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="etapa-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section-title">Atividades</div>
+            <div class="ativ-list">
+              <div class="ativ-item e1-ativ">📊 Critérios de interpretação de laudos de solo</div>
+              <div class="ativ-item e1-ativ">🧪 Algoritmos de calagem (clássico + Incaper)</div>
+              <div class="ativ-item e1-ativ">💧 Critérios de recomendação de gessagem</div>
+              <div class="ativ-item e1-ativ">🌿 Necessidade nutricional por fase fenológica</div>
+              <div class="ativ-item e1-ativ">🌱 Fichas técnicas de clones e cultivares</div>
+              <div class="ativ-item e1-ativ">📐 Critérios de espaçamento e número de hastes</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section-title">Atores envolvidos</div>
+            <div class="atores-wrap">
+              <span class="ator-pill a-coo">👤 Coordenador</span>
+              <span class="ator-pill a-inc">🔬 Pesquisadores Incaper</span>
+              <span class="ator-pill a-ufes">🎓 Docentes CCAE-UFES</span>
+              <span class="ator-pill a-ext">🏘️ Extensionistas locais</span>
+              <span class="ator-pill a-bol">⭐ Bolsista</span>
+            </div>
+            <div class="entrega-section" style="margin-top:14px">
+              <div class="entrega-icon">📋</div>
+              <div>
+                <div class="entrega-label">Entrega</div>
+                <div class="entrega-text">6 documentos técnicos validados e prontos para implementação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 15l7 7 7-7"/></svg>
+  </div>
+
+  <!-- ETAPA 2 -->
+  <div class="etapa-card">
+    <div class="etapa-number-col">
+      <div class="etapa-circle e2-color" onclick="toggle('e2')">2</div>
+    </div>
+    <div class="etapa-body-card e2-bdr" id="e2" onclick="toggle('e2')">
+      <div class="etapa-header">
+        <div class="etapa-header-left">
+          <div class="etapa-eyebrow e2-ey">Etapa 2 · Meses 3–12</div>
+          <div class="etapa-name">Desenvolvimento da plataforma web e dos módulos digitais</div>
+          <div class="etapa-months">Construção da plataforma PWA com os dois módulos e seis ferramentas</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="etapa-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section-title">Atividades</div>
+            <div class="ativ-list">
+              <div class="ativ-item e2-ativ">🏗️ Arquitetura lógica e protótipo navegável</div>
+              <div class="ativ-item e2-ativ">🟢 Módulo 1: interpretador de solo, calagem, gessagem, nutrição</div>
+              <div class="ativ-item e2-ativ">🌾 Módulo 2: catálogo de clones, espaçamento e hastes</div>
+              <div class="ativ-item e2-ativ">✅ Testes unitários (≥20 laudos simulados/ferramenta)</div>
+              <div class="ativ-item e2-ativ">🔗 Integração dos módulos em ambiente de homologação</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section-title">Atores envolvidos</div>
+            <div class="atores-wrap">
+              <span class="ator-pill a-coo">👤 Coordenador</span>
+              <span class="ator-pill a-bol">⭐ Bolsista</span>
+            </div>
+            <div class="entrega-section" style="margin-top:14px">
+              <div class="entrega-icon">💻</div>
+              <div>
+                <div class="entrega-label">Entrega</div>
+                <div class="entrega-text">Plataforma funcional com 6 ferramentas em ambiente de homologação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 15l7 7 7-7"/></svg>
+  </div>
+
+  <!-- ETAPA 3 -->
+  <div class="etapa-card">
+    <div class="etapa-number-col">
+      <div class="etapa-circle e3-color" onclick="toggle('e3')">3</div>
+    </div>
+    <div class="etapa-body-card e3-bdr" id="e3" onclick="toggle('e3')">
+      <div class="etapa-header">
+        <div class="etapa-header-left">
+          <div class="etapa-eyebrow e3-ey">Etapa 3 · Meses 11–16</div>
+          <div class="etapa-name">Testes e validação com grupos de usuários reais</div>
+          <div class="etapa-months">Validação funcional com três perfis complementares de usuários</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="etapa-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section-title">Grupos de Teste</div>
+            <div class="ativ-list">
+              <div class="ativ-item e3-ativ">🔬 Grupo 1 — Precisão técnica: extensionistas e consultores</div>
+              <div class="ativ-item e3-ativ">🎓 Grupo 2 — Usabilidade: estudantes CCAE-UFES</div>
+              <div class="ativ-item e3-ativ">🌾 Grupo 3 — Acessibilidade: produtores rurais</div>
+              <div class="ativ-item e3-ativ">🔧 Implementação de melhorias com base no feedback</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section-title">Atores envolvidos</div>
+            <div class="atores-wrap">
+              <span class="ator-pill a-ext">🏘️ Extensionistas Incaper</span>
+              <span class="ator-pill a-con">💼 Consultores</span>
+              <span class="ator-pill a-alu">🎓 Estudantes CCAE-UFES</span>
+              <span class="ator-pill a-prod">👨‍🌾 Produtores rurais</span>
+              <span class="ator-pill a-bol">⭐ Bolsista</span>
+            </div>
+            <div class="entrega-section" style="margin-top:14px">
+              <div class="entrega-icon">✅</div>
+              <div>
+                <div class="entrega-label">Entrega</div>
+                <div class="entrega-text">Versão final aprovada para lançamento público</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 15l7 7 7-7"/></svg>
+  </div>
+
+  <!-- ETAPA 4 -->
+  <div class="etapa-card">
+    <div class="etapa-number-col">
+      <div class="etapa-circle e4-color" onclick="toggle('e4')">4</div>
+    </div>
+    <div class="etapa-body-card e4-bdr" id="e4" onclick="toggle('e4')">
+      <div class="etapa-header">
+        <div class="etapa-header-left">
+          <div class="etapa-eyebrow e4-ey">Etapa 4 · Meses 13–20</div>
+          <div class="etapa-name">Elaboração de materiais de suporte e capacitação</div>
+          <div class="etapa-months">Manuais, vídeos e oficinas para técnicos, estudantes e produtores</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="etapa-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section-title">Atividades</div>
+            <div class="ativ-list">
+              <div class="ativ-item e4-ativ">📖 Manuais de uso dos Módulos 1 e 2</div>
+              <div class="ativ-item e4-ativ">🎬 Vídeos demonstrativos por ferramenta</div>
+              <div class="ativ-item e4-ativ">🏫 Oficinas: técnicos, consultores e estudantes</div>
+              <div class="ativ-item e4-ativ">🌄 Demos em dias de campo e eventos rurais do Incaper</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section-title">Atores envolvidos</div>
+            <div class="atores-wrap">
+              <span class="ator-pill a-coo">👤 Coordenador</span>
+              <span class="ator-pill a-ufes">🎓 Docentes CCAE-UFES</span>
+              <span class="ator-pill a-alu">🎓 Estudantes CCAE-UFES</span>
+              <span class="ator-pill a-ext">🏘️ Extensionistas Incaper</span>
+              <span class="ator-pill a-con">💼 Consultores</span>
+              <span class="ator-pill a-bol">⭐ Bolsista</span>
+            </div>
+            <div class="entrega-section" style="margin-top:14px">
+              <div class="entrega-icon">📚</div>
+              <div>
+                <div class="entrega-label">Entrega</div>
+                <div class="entrega-text">2 manuais · vídeos demonstrativos · mínimo 3 oficinas realizadas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 15l7 7 7-7"/></svg>
+  </div>
+
+  <!-- ETAPA 5 -->
+  <div class="etapa-card">
+    <div class="etapa-number-col">
+      <div class="etapa-circle e5-color" onclick="toggle('e5')">5</div>
+    </div>
+    <div class="etapa-body-card e5-bdr" id="e5" onclick="toggle('e5')">
+      <div class="etapa-header">
+        <div class="etapa-header-left">
+          <div class="etapa-eyebrow e5-ey">Etapa 5 · Meses 19–24</div>
+          <div class="etapa-name">Lançamento público e divulgação</div>
+          <div class="etapa-months">Publicação da plataforma e disseminação capilar nos 7 municípios</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="etapa-detail">
+        <div class="detail-grid">
+          <div>
+            <div class="detail-section-title">Atividades</div>
+            <div class="ativ-list">
+              <div class="ativ-item e5-ativ">🚀 Publicação em domínio definitivo (PWA + offline)</div>
+              <div class="ativ-item e5-ativ">📣 Materiais de divulgação institucionais</div>
+              <div class="ativ-item e5-ativ">🌾 Oficinas presenciais com produtores rurais</div>
+              <div class="ativ-item e5-ativ">🗺️ Divulgação via 7 escritórios locais do Incaper</div>
+              <div class="ativ-item e5-ativ">🔄 Publicação da versão final com ajustes incorporados</div>
+            </div>
+          </div>
+          <div>
+            <div class="detail-section-title">Atores envolvidos</div>
+            <div class="atores-wrap">
+              <span class="ator-pill a-inc">🔬 Incaper (escritórios locais)</span>
+              <span class="ator-pill a-ufes">🎓 CCAE-UFES</span>
+              <span class="ator-pill a-prod">👨‍🌾 Produtores rurais</span>
+              <span class="ator-pill a-bol">⭐ Bolsista</span>
+            </div>
+            <div class="entrega-section" style="margin-top:14px">
+              <div class="entrega-icon">🌐</div>
+              <div>
+                <div class="entrega-label">Entrega</div>
+                <div class="entrega-text">Plataforma pública, gratuita e irrestrita · versão final consolidada</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer-band">
+  <div class="footer-card">
+    <div class="footer-card-icon">🏢</div>
+    <div class="footer-card-label">Sede Operacional</div>
+    <div class="footer-card-text">CPDI Sul do Incaper<br>Cachoeiro de Itapemirim, ES</div>
+  </div>
+  <div class="footer-card">
+    <div class="footer-card-icon">🎓</div>
+    <div class="footer-card-label">Instituição Parceira</div>
+    <div class="footer-card-text">CCAE-UFES<br>Alegre, ES</div>
+  </div>
+  <div class="footer-card">
+    <div class="footer-card-icon">📍</div>
+    <div class="footer-card-label">Municípios atendidos</div>
+    <div class="footer-card-text">Cachoeiro · Castelo · Vargem Alta<br>Atílio Vivácqua · Mimoso · Muqui · Apiacá</div>
+  </div>
+</div>
+
+<script>
+  function toggle(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+  // Abrir a primeira etapa por padrão
+  document.getElementById('e1').classList.add('open');
+</script>
+
+</body>
+</html>
